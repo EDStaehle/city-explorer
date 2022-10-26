@@ -52,7 +52,7 @@ class App extends React.Component {
   }
  getWeather = async function(city){
   try {
-    let weatherData = await axios.get(`${process.env.REACT_APP_SERVER}/weather?city=${this.state.city}&lat=${this.state.lat}&lon=${this.state.lon}`)
+    let weatherData = await axios.get(`${process.env.REACT_APP_SERVER}/weather?searchQuery=${this.state.city}&lat=${this.state.lat}&lon=${this.state.lon}`)
     this.setState({
       weathererror:false,
       weathererrorMessage: '',
