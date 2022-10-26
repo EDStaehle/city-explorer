@@ -5,20 +5,24 @@ import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
 import SelectedCity from './SelectedCity';
+import Weather from './Weather';
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       city: '',
-      cityData: [],
+      cityData: {},
       error: false,
       errorMessage: '',
-      
+      weathererror: false,
+      weathererrorMessage: '',
+      weather: [],
+      lat: '',
+      lon: ''
       
     }
   }
   handleInput = (event) => {
-    event.preventDefault();
     this.setState({
       city: event.target.value
     })
@@ -33,19 +37,36 @@ class App extends React.Component {
       console.log(cityData.data[0]);
       this.setState({
         cityData: cityData.data[0],
-        error:false
-      });
+        error:false,
+        lat: cityData.data[0].lat,
+        lon: cityData.data[0].lon,
+      },this.getWeather);
 
     }catch(error){
       this.setState({
         error:true,
-        errorMessage: error.message
+        errorMessage: error.message,
+        
       })
     }
   }
- 
-  
-  render(){
+ getWeather = async function(city){
+  try {
+    let weatherData = await axios.get(`${process.env.REACT_APP_SERVER}/weather?city=${this.state.city}&lat=${this.state.lat}&lon=${this.state.lon}`)
+    this.setState({
+      weathererror:false,
+      weathererrorMessage: '',
+      weather: weatherData.data,
+    })
+  } catch (error) {
+    this.setState({
+      weathererror:true,
+      weathererrorMessage: error.message
+    })
+  }
+ }
+ render(){
+    console.log(this.state.weather);
     return(
       <>
       
@@ -62,6 +83,13 @@ class App extends React.Component {
       getCityData={this.getCityData}
       handleInput={this.handleInput}
       />
+      {this.state.weather.length &&
+      <Weather
+      weather={this.state.weather}
+      error={this.state.weathererror}
+      errorMessage={this.state.weathererrorMessage}
+      />
+      }
       <Footer
       
       />
