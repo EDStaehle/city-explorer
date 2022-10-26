@@ -6,13 +6,13 @@ export default class Weather extends Component {
   // let weatherDataParsed = this.props.weather.data.values();
 
   render() {
-    let weatherDataParsed = this.props.weather.map((d,) => (
+    let weatherDataParsed = this.props.weather.map((d, key) => (
      
-      <Accordion defaultActiveKey="0">
+      <Accordion className={key + 1} defaultActiveKey="0">
         <Accordion.Item eventKey = {d._id}key={d._id}>
           
           {/* <Accordion.Header>{d.key}</Accordion.Header> */}
-          <Accordion.Header>Day {d._id}</Accordion.Header>
+          <Accordion.Header>Day {key + 1}</Accordion.Header>
           <Accordion.Body>
             {d.weather}
             
