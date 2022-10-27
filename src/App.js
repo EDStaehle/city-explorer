@@ -6,6 +6,7 @@ import Main from './Main';
 import Footer from './Footer';
 import SelectedCity from './SelectedCity';
 import Weather from './Weather';
+import Movies from './Movies';
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -18,7 +19,10 @@ class App extends React.Component {
       weathererrorMessage: '',
       weather: [],
       lat: '',
-      lon: ''
+      lon: '',
+      movieError: false,
+      movieErrorMessage: '',
+      movie: []
       
     }
   }
@@ -40,7 +44,7 @@ class App extends React.Component {
         error:false,
         lat: cityData.data[0].lat,
         lon: cityData.data[0].lon,
-      },this.getWeather);
+      },this.makeApiCalls);
 
     }catch(error){
       this.setState({
@@ -50,9 +54,13 @@ class App extends React.Component {
       })
     }
   }
- getWeather = async function(city){
+  makeApiCalls = async function() {
+    await this.getWeather();
+    await this.getMovies();
+  }
+ getWeather = async function(){
   try {
-    let weatherData = await axios.get(`${process.env.REACT_APP_SERVER}/weather?searchQuery=${this.state.city}&lat=${this.state.lat}&lon=${this.state.lon}`)
+    let weatherData = await axios.get(`${process.env.REACT_APP_TEST_SERVER}/weather?searchQuery=${this.state.city}&lat=${this.state.lat}&lon=${this.state.lon}`)
     this.setState({
       weathererror:false,
       weathererrorMessage: '',
@@ -63,6 +71,23 @@ class App extends React.Component {
       weathererror:true,
       weathererrorMessage: error.message
     })
+  }
+ }
+ getMovies = async() => {
+  try {
+    let movieData = await axios.get(`${process.env.REACT_APP_TEST_SERVER}/movies?city_name=${this.state.city}`)
+    console.log(movieData);
+    this.setState({
+      movieError: false,
+      movieErrorMessage: '',
+      movie: movieData.data
+    })
+  } catch (error) {
+    this.setState({
+      movieError: true,
+      movieErrorMessage: error.message
+    })
+
   }
  }
  render(){
@@ -76,6 +101,13 @@ class App extends React.Component {
 
       <Main
       />
+      
+      <Movies
+      movies={this.state.movie}
+      error={this.state.movieError}
+      errorMessage={this.state.movieErrorMessage}
+      />
+      
       <SelectedCity
       error={this.state.error}
       errorMessage={this.state.errorMessage}
@@ -83,7 +115,7 @@ class App extends React.Component {
       getCityData={this.getCityData}
       handleInput={this.handleInput}
       />
-      {this.state.weather.length &&
+      {this.state.weather &&
       <Weather
       weather={this.state.weather}
       error={this.state.weathererror}

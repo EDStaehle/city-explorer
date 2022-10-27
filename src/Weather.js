@@ -27,7 +27,6 @@ export default class Weather extends Component {
     console.log(this.props.weather);
     return (
       <div>
-
         {weatherDataParsed}
       </div>
       
