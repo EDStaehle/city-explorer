@@ -10,8 +10,6 @@ export default class Weather extends Component {
      
       <Accordion className={key + 1} defaultActiveKey="0">
         <Accordion.Item eventKey = {d._id}key={d._id}>
-          
-          {/* <Accordion.Header>{d.key}</Accordion.Header> */}
           <Accordion.Header>Day {key + 1}</Accordion.Header>
           <Accordion.Body>
             {d.weather}
@@ -24,7 +22,6 @@ export default class Weather extends Component {
         </Accordion>
     
     ))
-    console.log(this.props.weather);
     return (
       <div>
         {weatherDataParsed}

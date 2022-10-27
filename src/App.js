@@ -33,12 +33,10 @@ class App extends React.Component {
   }
   getCityData = async (event) => {
     event.preventDefault();
-    console.log(this.state.city);
     try {
       let url = `https://us1.locationiq.com/v1/search?key=${process.env.REACT_APP_CITYSELECTOR_API_KEY}&q=${this.state.city}&format=json`
       
       let cityData = await axios.get(url);
-      console.log(cityData.data[0]);
       this.setState({
         cityData: cityData.data[0],
         error:false,
@@ -76,7 +74,6 @@ class App extends React.Component {
  getMovies = async() => {
   try {
     let movieData = await axios.get(`${process.env.REACT_APP_SERVER}/movies?city_name=${this.state.city}`)
-    console.log(movieData);
     this.setState({
       movieError: false,
       movieErrorMessage: '',
@@ -91,7 +88,7 @@ class App extends React.Component {
   }
  }
  render(){
-    console.log(this.state.weather);
+
     return(
       <>
       
